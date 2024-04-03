@@ -39,11 +39,11 @@ public class Monitor {
 	public int asignarMaquina() throws InterruptedException{
 		llave.lock();
 		try {
-			if(nMaquinasOcupadas == 3) {
+			while(nMaquinasOcupadas == Programa.NUM_MAQUINAS) {
 				maquinaLibre.await();
 			}
 			int valor = 0;
-			while(valor < 2 && maquinasOcupadas[valor]) {
+			while(maquinasOcupadas[valor]) {
 				valor++;
 			}
 			nMaquinasOcupadas++;

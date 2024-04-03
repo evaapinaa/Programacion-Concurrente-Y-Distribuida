@@ -22,7 +22,6 @@ public class Cliente implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(random.nextInt(5000));
 			monitor.imprimir("\n+++++++++++++++++++++++++++++++\nEl Cliente " + id + " ha entrado al banco\n+++++++++++++++++++++++++++++++\n",0);
 			try {
 				 maquina = monitor.asignarMaquina();

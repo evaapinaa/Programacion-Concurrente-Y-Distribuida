@@ -1,12 +1,14 @@
 package ejercicio3;
 
+import java.util.Random;
+
 public class Programa {
 	
 	// CONSTANTES
 	public final static int NUM_CLIENTES = 50;
 	public final static int NUM_MESAS = 4;
 	public final static int NUM_MAQUINAS = 3;
-	
+	public final static Random random = new Random();
 	// VARIABLES
 	public static Thread clientesDentro[] = new Thread[NUM_CLIENTES];
 	
@@ -18,10 +20,14 @@ public class Programa {
 			clientesDentro[i] = new Thread(new Cliente(monitor,i));
 			
 		}
+		
 		for(int i = 0; i < NUM_CLIENTES; i++) {
 			clientesDentro[i].start();
+			try {
+				Thread.sleep(random.nextInt(1000)); // entradas en tiempos diferentes
+			} catch (InterruptedException e) {}
 		}
-
+		
 		for (Thread cliente : clientesDentro) {
             try {
                 cliente.join();
