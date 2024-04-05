@@ -18,7 +18,6 @@ public class Programa {
 		
 		for(int i = 0; i < NUM_CLIENTES; i++) {
 			clientesDentro[i] = new Thread(new Cliente(monitor,i));
-			
 		}
 		
 		for(int i = 0; i < NUM_CLIENTES; i++) {
@@ -29,12 +28,12 @@ public class Programa {
 		}
 		
 		for (Thread cliente : clientesDentro) {
-            try {
-                cliente.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+	           	try {
+	                	cliente.join();
+	            	} catch (InterruptedException e) {
+	                	e.printStackTrace();
+	            	}
+        	}
 		
 		System.out.println("Todos los clientes han sido atendidos.");
 	}
