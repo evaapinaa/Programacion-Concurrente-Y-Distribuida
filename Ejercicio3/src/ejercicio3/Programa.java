@@ -8,9 +8,10 @@ public class Programa {
 	public final static int NUM_CLIENTES = 50;
 	public final static int NUM_MESAS = 4;
 	public final static int NUM_MAQUINAS = 3;
-	public final static Random random = new Random();
+	
 	// VARIABLES
 	public static Thread clientesDentro[] = new Thread[NUM_CLIENTES];
+	public final static Random random = new Random();
 	
 	public static void main(String[] args) {
 	
