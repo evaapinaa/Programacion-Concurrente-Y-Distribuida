@@ -11,7 +11,7 @@ public class Programa {
 	
 	// VARIABLES
 	public static Thread clientesDentro[] = new Thread[NUM_CLIENTES];
-	public final static Random random = new Random();
+	public static Random random = new Random();
 	
 	public static void main(String[] args) {
 	
