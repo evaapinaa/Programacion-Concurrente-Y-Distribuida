@@ -69,13 +69,13 @@ public class Monitor {
 		llave.lock();
 		try {
 			int indiceMesaMenorTiempo = 0;
-            for (int i = 0; i < tiemposEsperaMesas.length; i++) {
-                if (tiemposEsperaMesas[i] < tiemposEsperaMesas[indiceMesaMenorTiempo]) {
-                    indiceMesaMenorTiempo = i;
-                }
-            }
-            tiemposEsperaMesas[indiceMesaMenorTiempo] += tiempoCliente;
-            return indiceMesaMenorTiempo;
+            		for (int i = 0; i < tiemposEsperaMesas.length; i++) {
+                		if (tiemposEsperaMesas[i] < tiemposEsperaMesas[indiceMesaMenorTiempo]) {
+                    			indiceMesaMenorTiempo = i;
+                		}
+            		}
+            		tiemposEsperaMesas[indiceMesaMenorTiempo] += tiempoCliente;
+           	 	return indiceMesaMenorTiempo;
 		} finally {
 			llave.unlock();
 		}
@@ -111,7 +111,7 @@ public class Monitor {
 				System.out.println(cadena);
 			}
 			else {
-				System.err.println(cadena);
+				System.err.println(cadena); // para imprimir en color, y diferenciar
 			}
 		} finally {
 			llave.unlock();
