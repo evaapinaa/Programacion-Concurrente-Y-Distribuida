@@ -2,13 +2,31 @@ package Ejercicio4;
 
 import messagepassing.*;
 
+/**
+ * Clase del programa principal.
+ *
+ */
 public class Programa {
 
+	/**
+	 * Clase que simula el hilo controlador.
+	 *
+	 */
 	static class Controlador extends Thread {
 		private MailBox pEnviar, pCajaA, pCajaB, pLiberar, pImprimir;
 		private boolean cajaALibre;
 		private boolean cajaBLibre;
 		private Selector s;
+
+		/**
+		 * Constructor de la clase.
+		 * 
+		 * @param pEnviar   Buzón de mensajes para enviar.
+		 * @param pCajaA    Buzón de mensajes para la caja A.
+		 * @param pCajaB    Buzón de mensajes para la caja B.
+		 * @param pLiberar  Buzón de mensajes para liberar una caja.
+		 * @param pImprimir Buzón de mensajes para imprimir.
+		 */
 
 		public Controlador(MailBox pEnviar, MailBox pCajaA, MailBox pCajaB, MailBox pLiberar, MailBox pImprimir) {
 			this.s = new Selector();
@@ -27,6 +45,9 @@ public class Programa {
 
 		}
 
+		/**
+		 * Método run del hilo controlador.
+		 */
 		public void run() {
 			while (true) {
 				pCajaA.setGuardValue(cajaALibre == true);
@@ -86,6 +107,11 @@ public class Programa {
 	public static Thread Clientes[] = new Thread[NUM_CLIENTES];
 	public static MailBox buzonesClientes[] = new MailBox[30];
 
+	/**
+	 * Programa principal.
+	 * 
+	 * @param args Argumentos del programa.
+	 */
 	public static void main(String[] args) {
 
 		MailBox pEnviar = new MailBox();

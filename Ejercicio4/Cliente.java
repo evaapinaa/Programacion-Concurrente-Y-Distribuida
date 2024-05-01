@@ -2,7 +2,12 @@ package Ejercicio4;
 
 import messagepassing.*;
 
+/**
+ * Clase que simula un cliente.
+ *
+ */
 public class Cliente implements Runnable {
+
 	private int id;
 	private MailBox buzonEnvio;
 	private MailBox buzonRespuesta;
@@ -14,26 +19,57 @@ public class Cliente implements Runnable {
 	private int tiempoCompra;
 	private int tiempoPago;
 
+	/**
+	 * Getter de la caja asignada.
+	 * 
+	 * @return Identificador de la caja.
+	 */
 	public String getCajaAsignada() {
 		return cajaAsignada;
 	}
 
+	/**
+	 * Setter de la caja asignada.
+	 * 
+	 * @param cajaAsignada Identificador de la caja.
+	 */
 	public void setCajaAsignada(String cajaAsignada) {
 		this.cajaAsignada = cajaAsignada;
 	}
 
+	/**
+	 * Getter del tiempo de pago.
+	 * 
+	 * @return Tiempo de pago.
+	 */
 	public int getTiempoPago() {
 		return tiempoPago;
 	}
 
+	/**
+	 * Setter del tiempo de pago.
+	 * 
+	 * @param tiempoPago Tiempo de pago.
+	 */
 	public void setTiempoPago(int tiempoPago) {
 		this.tiempoPago = tiempoPago;
 	}
 
-	public Cliente(int id, MailBox buzon, MailBox buzonRespuesta, MailBox buzonCajaA, MailBox buzonCajaB,
+	/**
+	 * Constructor de la clase.
+	 * 
+	 * @param id             Identificador del cliente.
+	 * @param buzon          Buzón de envío.
+	 * @param buzonRespuesta Buzón de respuesta.
+	 * @param buzonCajaA     Buzón de la caja A.
+	 * @param buzonCajaB     Buzón de la caja B.
+	 * @param liberar        Buzón para liberar la caja.
+	 * @param buzonImprimir  Buzón para imprimir.
+	 */
+	public Cliente(int id, MailBox buzonEnvio, MailBox buzonRespuesta, MailBox buzonCajaA, MailBox buzonCajaB,
 			MailBox liberar, MailBox buzonImprimir) {
 		this.id = id;
-		this.buzonEnvio = buzon;
+		this.buzonEnvio = buzonEnvio;
 		this.buzonRespuesta = buzonRespuesta;
 		this.buzonCajaA = buzonCajaA;
 		this.buzonCajaB = buzonCajaB;
@@ -41,6 +77,9 @@ public class Cliente implements Runnable {
 		this.buzonImprimir = buzonImprimir;
 	}
 
+	/**
+	 * Método run del hilo. Realiza las operaciones de un cliente.
+	 */
 	@Override
 	public void run() {
 		for (int i = 0; i < 5; i++) {
