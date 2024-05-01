@@ -103,8 +103,20 @@ public class Programa {
 	}
 
 	// CONSTANTES, VARIABLES
+	
+	/**
+	 * Número de clientes.
+     */
 	public static final int NUM_CLIENTES = 30;
+	
+	/**
+	 * Array de hilos clientes.
+	 */
 	public static Thread Clientes[] = new Thread[NUM_CLIENTES];
+	
+	/**
+	 * Array de buzones de respuesta de cada cliente.
+	 */
 	public static MailBox buzonesClientes[] = new MailBox[30];
 
 	/**

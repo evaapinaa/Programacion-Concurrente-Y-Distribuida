@@ -59,7 +59,7 @@ public class Cliente implements Runnable {
 	 * Constructor de la clase.
 	 * 
 	 * @param id             Identificador del cliente.
-	 * @param buzon          Buzón de envío.
+	 * @param buzonEnvio     Buzón de envío.
 	 * @param buzonRespuesta Buzón de respuesta.
 	 * @param buzonCajaA     Buzón de la caja A.
 	 * @param buzonCajaB     Buzón de la caja B.

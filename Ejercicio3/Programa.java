@@ -8,11 +8,27 @@ import java.util.Random;
 public class Programa {
 
 	// CONSTANTES
+	/**
+	 * Número de clientes.
+	 */
 	public final static int NUM_CLIENTES = 50;
+	/**
+	 * Número de mesas.
+	 */
 	public final static int NUM_MESAS = 4;
+	/**
+	 * Número de máquinas.
+	 */
 	public final static int NUM_MAQUINAS = 3;
+	/**
+	 * Random para generar números aleatorios.
+	 */
 	public final static Random random = new Random();
+
 	// VARIABLES
+	/**
+	 * Array de hilos clientes.
+	 */
 	public static Thread clientesDentro[] = new Thread[NUM_CLIENTES];
 
 	/**

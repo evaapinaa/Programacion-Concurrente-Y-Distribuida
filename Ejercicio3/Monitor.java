@@ -54,7 +54,7 @@ public class Monitor {
 	 * Método que asigna una máquina a un cliente.
 	 * 
 	 * @return Índice de la máquina asignada.
-	 * @throws InterruptedException
+	 * @throws InterruptedException Si se produce una interrupción.
 	 */
 	public int asignarMaquina() throws InterruptedException {
 		llave.lock();
@@ -95,7 +95,7 @@ public class Monitor {
 	 * 
 	 * @param tiempoCliente Tiempo que tarda el cliente en ser atendido.
 	 * @return Índice de la mesa asignada.
-	 * @throws InterruptedException
+	 * @throws InterruptedException Si se produce una interrupción.
 	 */
 	public int asignarMesa(int tiempoCliente) throws InterruptedException {
 		llave.lock();
@@ -117,7 +117,7 @@ public class Monitor {
 	 * Método que sienta a un cliente en una mesa.
 	 * 
 	 * @param id Identificador de la mesa.
-	 * @throws InterruptedException
+	 * @throws InterruptedException Si se produce una interrupción.
 	 */
 	public void sentarMesa(int id) throws InterruptedException {
 		llave.lock();
@@ -131,6 +131,12 @@ public class Monitor {
 		}
 	}
 
+	/**
+	 * Método que libera una mesa.
+	 * 
+	 * @param id            Identificador de la mesa.
+	 * @param tiempoCliente Tiempo que tarda el cliente en ser atendido.
+	 */
 	public void dejarMesa(int id, int tiempoCliente) {
 		llave.lock();
 		try {

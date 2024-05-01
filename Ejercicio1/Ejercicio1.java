@@ -5,14 +5,33 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Clase del programa que realiza operaciones sobre un array.
+ * Clase del programa principal.  
  */
 public class Ejercicio1 {
 
+	/**
+	 * Número de consumidores.
+     */
 	public static final int N_CONSUMIDORES = 10;
+	 /**
+     * Longitud del array.
+     */
 	public static final int LONGITUD_ARRAY = 110;
+	
+	
+	/**
+	 * Random para generar números aleatorios.
+	 */
 	public static Random random = new Random();
+	
+	/**
+	 * Array de elementos a procesar.
+	 */
 	public static int[] array = new int[LONGITUD_ARRAY];
+	
+	/**
+	 * Cerrojo para asegurar exclusión mutua.
+	 */
 	public static ReentrantLock lock = new ReentrantLock();
 
 	/**
