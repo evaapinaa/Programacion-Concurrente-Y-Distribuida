@@ -5,21 +5,14 @@ import messagepassing.*;
 public class Programa {
 
 	static class Controlador extends Thread {
-		private MailBox pEnviar, pRespuesta, pCajaA, pCajaB, pLiberar, pImprimir;
+		private MailBox pEnviar, pCajaA, pCajaB, pLiberar, pImprimir;
 		private boolean cajaALibre;
 		private boolean cajaBLibre;
 		private Selector s;
-		private volatile boolean fin = false;
 
-		public void setFin(boolean fin) {
-			this.fin = fin;
-		}
-
-		public Controlador(MailBox pEnviar, MailBox pRespuesta, MailBox pCajaA, MailBox pCajaB, MailBox pLiberar,
-				MailBox pImprimir) {
+		public Controlador(MailBox pEnviar, MailBox pCajaA, MailBox pCajaB, MailBox pLiberar, MailBox pImprimir) {
 			this.s = new Selector();
 			this.pEnviar = pEnviar;
-			this.pRespuesta = pRespuesta;
 			this.pLiberar = pLiberar;
 			this.pCajaA = pCajaA;
 			this.pCajaB = pCajaB;
@@ -31,13 +24,11 @@ public class Programa {
 			s.addSelectable(pCajaB, false);
 			s.addSelectable(pLiberar, false);
 			s.addSelectable(pImprimir, false);
-			s.addSelectable(pRespuesta, false);
 
 		}
 
 		public void run() {
-
-			while (!fin) {
+			while (true) {
 				pCajaA.setGuardValue(cajaALibre == true);
 				pCajaB.setGuardValue(cajaBLibre == true);
 				switch (s.selectOrBlock()) {
@@ -55,30 +46,21 @@ public class Programa {
 
 					pImprimir.send(mensajeImprimir);
 
-					String respuesta = id + "," + tiempoPago * 100 + "," + cajaAsignada;
-					pRespuesta.send(respuesta);
+					String respuesta = tiempoPago + "," + cajaAsignada;
+					buzonesClientes[(int) id].send(respuesta);
 
 					break;
 
 				case 2: // ponerse en caja A
-					Object tiempoA = pCajaA.receive();
+					id = pCajaA.receive();
 					cajaALibre = false;
-					try {
-						Thread.sleep((int) tiempoA); // Simula la compra
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
+					buzonesClientes[(int) id].send("ok");
 					break;
 
 				case 3: // ponerse en caja B
-					Object tiempoB = pCajaB.receive();
+					id = pCajaB.receive();
 					cajaBLibre = false;
-					try {
-						Thread.sleep((int) tiempoB); // Simula la compra
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					buzonesClientes[(int) id].send("ok");
 
 					break;
 				case 4: // liberar
@@ -90,59 +72,48 @@ public class Programa {
 
 					break;
 				case 5: // imprimir
-					System.out.println(pImprimir.receive());
+					Object mensaje = pImprimir.receive();
+					System.out.println(mensaje);
 					break;
-					
 				}
-			}
 
+			}
 		}
 	}
 
 	// CONSTANTES, VARIABLES
 	public static final int NUM_CLIENTES = 30;
 	public static Thread Clientes[] = new Thread[NUM_CLIENTES];
+	public static MailBox buzonesClientes[] = new MailBox[30];
 
 	public static void main(String[] args) {
 
 		MailBox pEnviar = new MailBox();
-		MailBox pRespuesta = new MailBox();
 		MailBox pCajaA = new MailBox();
 		MailBox pCajaB = new MailBox();
 		MailBox pLiberar = new MailBox();
 		MailBox pImprimir = new MailBox();
-		Controlador controlador = new Controlador(pEnviar, pRespuesta, pCajaA, pCajaB, pLiberar, pImprimir);
-		Thread controladorH = new Thread(controlador);
-		controladorH.start();
+
+		Controlador controlador = new Controlador(pEnviar, pCajaA, pCajaB, pLiberar, pImprimir);
+		controlador.start();
 
 		for (int i = 0; i < NUM_CLIENTES; i++) {
-			Clientes[i] = new Thread(new Cliente(i, pEnviar, pRespuesta, pCajaA, pCajaB, pLiberar, pImprimir));
+			buzonesClientes[i] = new MailBox();
+			Clientes[i] = new Thread(new Cliente(i, pEnviar, buzonesClientes[i], pCajaA, pCajaB, pLiberar, pImprimir));
+		}
+
+		for (int i = 0; i < NUM_CLIENTES; i++) {
 			Clientes[i].start();
 		}
 
 		for (int i = 0; i < NUM_CLIENTES; i++) {
 			try {
 				Clientes[i].join();
-			} catch (Exception e) {
+				controlador.join();
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		controlador.setFin(true);
-		
-		
-		try {
-			controladorH.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		
-		controladorH.interrupt();
 
-		System.out.println("Fin del programa principal");
-		
-		
 	}
-
 }

@@ -38,12 +38,13 @@ public class Cliente implements Runnable {
 		this.buzonCajaB = buzonCajaB;
 		this.buzonLiberar = liberar;
 		this.buzonImprimir = buzonImprimir;
-		this.tiempoCompra = (int) (Math.random() * 10) + 1;
 	}
 	
 	@Override
 	public void run() {
 		for (int i = 0; i < 5; i++) {
+			
+			tiempoCompra = (int) (Math.random() * 10) + 1;
 			
             try {
                 Thread.sleep(tiempoCompra * 100); // Simula la compra
@@ -55,25 +56,32 @@ public class Cliente implements Runnable {
 			
 			Object respuesta = buzonRespuesta.receive();
 			String[] partes = respuesta.toString().split(",");
-            int id = Integer.parseInt(partes[0]);
-            this.setTiempoPago(Integer.parseInt(partes[1]));
-            this.setCajaAsignada(partes[2]);
+            this.setTiempoPago(Integer.parseInt(partes[0]));
+            this.setCajaAsignada(partes[1]);
             
-            if(cajaAsignada.equals("A")) buzonCajaA.send(tiempoPago);
-            else buzonCajaB.send(tiempoPago);
+            if(cajaAsignada.equals("A")) buzonCajaA.send(id);
+            else buzonCajaB.send(id);
             
+            buzonRespuesta.receive();
             
             Object mensaje = "** Cliente " + id+ " usando la caja " + this.getCajaAsignada();
-			buzonImprimir.send(mensaje);
-			
+            buzonImprimir.send(mensaje);
+            
+            try {
+            	Thread.sleep(tiempoPago*100);
+            } catch(InterruptedException e) {
+            	e.printStackTrace();
+            }
+            
 			buzonLiberar.send(cajaAsignada);
+			
 			Object info = "\n--------------------------\n" + "Persona " + id + " ha usado la caja " + cajaAsignada +
-                    "\nTiempo de pago = " + tiempoPago +
-                    "\nThread.sleep(" + tiempoPago + ")" +
+                    "\nTiempo de pago = " + tiempoPago*100 +
                     "\nPersona " + id + " liberando la caja " + cajaAsignada
                     + "\n--------------------------\n" ;
 			
 			buzonImprimir.send(info);
+			buzonRespuesta.receive();
 		}
 	}
 }
