@@ -40,12 +40,7 @@ public class Ejercicio1 {
 		/**
 		 * Mostramos el array por pantalla.
 		 */
-		lock.lock();
-		try {
-			System.out.println("Array a operar : " + Arrays.toString(array));
-		} finally {
-			lock.unlock();
-		}
+		System.out.println("Array a operar : " + Arrays.toString(array));
 
 		/**
 		 * Creamos los hilos consumidores y los iniciamos.
