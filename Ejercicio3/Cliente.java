@@ -3,8 +3,14 @@ package Ejercicio3;
 import java.util.Random;
 
 /**
- * Clase Cliente que simula el comportamiento de un cliente en un banco.
+ * Esta clase representa un cliente que realiza diversas operaciones en un
+ * banco. Cada cliente es un hilo que simula la elección de un servicio en una
+ * máquina y luego espera ser atendido en una de las mesas disponibles. El
+ * cliente selecciona una máquina, espera un tiempo aleatorio que simula la
+ * elección de un servicio, y luego procede a colocarse en la cola de la mesa
+ * con el menor tiempo de espera estimado.
  */
+
 public class Cliente implements Runnable {
 
 	private Monitor monitor;
@@ -29,8 +35,16 @@ public class Cliente implements Runnable {
 	}
 
 	/**
-	 * Método run que simula el comportamiento de un cliente en un banco.
+	 * Define el comportamiento del cliente en el banco.  
+	 * 1. Coge la primera máquina disponible. 
+	 * 2. Simula el tiempo que tarda en seleccionar el servicio. 
+	 * 3. Se libera la máquina y se dirige a una mesa. 
+	 * 4. Se asigna a la mesa con el menor tiempo de espera,
+	 * espera  a ser atendido, y luego se libera la mesa para
+	 * que otros clientes puedan usarla. También se imprime por consola 
+	 * el flujo de su servicio.
 	 */
+
 	@Override
 	public void run() {
 		try {

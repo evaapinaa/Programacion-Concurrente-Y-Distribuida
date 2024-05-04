@@ -3,8 +3,13 @@ package Ejercicio3;
 import java.util.Random;
 
 /**
- * Clase del programa principal del banco.
+ * Programa principal que simula el funcionamiento de un banco atendiendo a
+ * múltiples clientes. Utiliza hilos para representar los clientes y un monitor
+ * para gestionar el acceso concurrente a recursos compartidos, como son las
+ * mesas y máquinas del banco. Cada cliente actúa de manera independiente y su
+ * comportamiento está sincronizado mediante el uso de un Monitor.
  */
+
 public class Programa {
 
 	// CONSTANTES
@@ -32,9 +37,15 @@ public class Programa {
 	public static Thread clientesDentro[] = new Thread[NUM_CLIENTES];
 
 	/**
-	 * Método principal del programa.
+	 * Método principal de la simulación del banco. Inicializa los clientes y son
+	 * gestionados desde que entran al banco, hasta que todos han sido atendidos.
+	 * Los clientes son creados y gestionados como hilos independientes, y se les
+	 * asigna un identificador único. Se simula una aletoriedad en la llegada de los
+	 * clientes mediante un tiempo de espera random, antes de que cada cliente
+	 * inicie. Finalmente, espera a que todos los clientes completen su ejecución.
 	 * 
-	 * @param args Argumentos de la línea de comandos.
+	 * @param args Argumentos de la línea de comandos, no utilizados en esta
+	 *             simulación.
 	 */
 	public static void main(String[] args) {
 

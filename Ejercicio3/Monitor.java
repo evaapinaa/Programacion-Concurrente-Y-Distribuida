@@ -4,11 +4,16 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Clase Monitor que controla la entrada de los clientes al banco.
+ * Esta clase actúa como un monitor para sincronizar la interacción entre los
+ * diferentes clientes en el banco. Controla el acceso concurrente a las
+ * máquinas y las mesas, asegurando que los clientes sean atendidos sin
+ * problema. Implementa mecanismos de bloqueo y condiciones para manejar la
+ * asignación de recursos y la espera de los clientes.
  */
+
 public class Monitor {
 
-	private ReentrantLock llave = new ReentrantLock(true); // FIFO
+	private ReentrantLock llave = new ReentrantLock(true); // true => FIFO
 	private Condition[] mesa;
 	private Condition maquinaLibre = llave.newCondition();
 	private boolean[] mesasOcupadas;
@@ -26,11 +31,14 @@ public class Monitor {
 	}
 
 	/**
-	 * Constructor de la clase Monitor.
+	 * Inicializa el monitor con el número especificado de mesas y máquinas.
+	 * Inicializa los diversos arrays para gestionar el estado de ocupación de cada
+	 * recurso y las colas de espera asociadas.
 	 * 
-	 * @param nMesas    Número de mesas del banco.
-	 * @param nMaquinas Número de máquinas del banco.
+	 * @param nMesas    Número total de mesas disponibles en el banco.
+	 * @param nMaquinas Número total de máquinas disponibles en el banco.
 	 */
+
 	public Monitor(int nMesas, int nMaquinas) {
 		this.tiemposEsperaMesas = new int[nMesas];
 		for (int i = 0; i < nMesas; i++) {
@@ -51,11 +59,13 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que asigna una máquina a un cliente.
+	 * Asigna una máquina disponible a un cliente. Si no hay máquinas disponibles,
+	 * el cliente espera hasta que una se libere.
 	 * 
-	 * @return Índice de la máquina asignada.
-	 * @throws InterruptedException Si se produce una interrupción.
+	 * @return El índice de la máquina asignada al cliente.
+	 * @throws InterruptedException Si el hilo es interrumpido mientras espera.
 	 */
+
 	public int asignarMaquina() throws InterruptedException {
 		llave.lock();
 		try {
@@ -75,10 +85,12 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que libera una máquina.
+	 * Libera una máquina que estaba siendo utilizada por un cliente. Notifica a
+	 * todos los demás clientes en espera.
 	 * 
-	 * @param indice Índice de la máquina a liberar.
+	 * @param indice Índice de la máquina que se libera.
 	 */
+
 	public void dejarMaquina(int indice) {
 		llave.lock();
 		try {
@@ -91,12 +103,14 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que asigna una mesa a un cliente.
+	 * Asigna al cliente la mesa con el menor tiempo de espera acumulado. Calcula el
+	 * tiempo adicional que el cliente añadirá a la espera de esa mesa.
 	 * 
-	 * @param tiempoCliente Tiempo que tarda el cliente en ser atendido.
-	 * @return Índice de la mesa asignada.
-	 * @throws InterruptedException Si se produce una interrupción.
+	 * @param tiempoCliente Tiempo que el cliente necesitará en la mesa.
+	 * @return Índice de la mesa asignada al cliente.
+	 * @throws InterruptedException Si el hilo es interrumpido mientras espera.
 	 */
+
 	public int asignarMesa(int tiempoCliente) throws InterruptedException {
 		llave.lock();
 		try {
@@ -114,10 +128,14 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que sienta a un cliente en una mesa.
+	 * Asigna una mesa específica a un cliente, asegurando que la mesa esté libre de
+	 * antes. Utiliza un mecanismo de bloqueo para controlar el acceso concurrente y
+	 * garantizar que solo un cliente a la vez pueda ocupar una mesa. Si la mesa ya
+	 * está ocupada, el cliente entrante espera hasta que la mesa se libere.
 	 * 
-	 * @param id Identificador de la mesa.
-	 * @throws InterruptedException Si se produce una interrupción.
+	 * @param id Identificador de la mesa a ocupar.
+	 * @throws InterruptedException Si el hilo que intenta sentarse en la mesa es
+	 *                              interrumpido mientras espera.
 	 */
 	public void sentarMesa(int id) throws InterruptedException {
 		llave.lock();
@@ -132,10 +150,12 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que libera una mesa.
+	 * Libera una mesa después de que un cliente haya sido atendido. Actualiza el
+	 * tiempo de espera de la mesa y notifica al siguiente cliente que puede ser
+	 * atendido en esa mesa.
 	 * 
-	 * @param id            Identificador de la mesa.
-	 * @param tiempoCliente Tiempo que tarda el cliente en ser atendido.
+	 * @param id            Índice de la mesa que se libera.
+	 * @param tiempoCliente Tiempo que el cliente pasó siendo atendido en la mesa.
 	 */
 	public void dejarMesa(int id, int tiempoCliente) {
 		llave.lock();
@@ -149,12 +169,14 @@ public class Monitor {
 	}
 
 	/**
-	 * Método que imprime una cadena.
+	 * Imprime mensajes utilizando un reentrant lock para garantizar que los los
+	 * mensajes se impriman sin intercalación.
 	 * 
-	 * @param cadena Cadena a imprimir.
-	 * @param n      Número que indica si la cadena es de error o no, para poder
-	 *               imprimir con color y así poder distinguir en la consola.
+	 * @param cadena Cadena de texto a imprimir.
+	 * @param n      Indicador de tipo de mensaje (0 para normal, 1 para error:
+	 *               "imprimir con color en la consola").
 	 */
+
 	public void imprimir(String cadena, int n) {
 		llave.lock();
 		try {

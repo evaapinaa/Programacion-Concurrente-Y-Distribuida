@@ -3,9 +3,15 @@ package Ejercicio4;
 import messagepassing.*;
 
 /**
- * Clase que simula un cliente.
- *
+ * Simula el comportamiento de un cliente en un supermercado con dos cajas. Cada
+ * cliente realiza 5 rondas, en las que realiza compras, solicita asignación de
+ * caja, realiza pagos y luego libera la caja asignada. La asignación de caja
+ * depende del tiempo estimado de pago calculado aleatoriamente: los tiempos más
+ * largos son asignados a la caja más rápida (A). La comunicación con el
+ * controlador de cajas se realiza mediante buzones de mensajes, haciendo así
+ * una sincronización basada en el paso de mensajes asíncrono.
  */
+
 public class Cliente implements Runnable {
 
 	private int id;
@@ -20,25 +26,25 @@ public class Cliente implements Runnable {
 	private int tiempoPago;
 
 	/**
-	 * Getter de la caja asignada.
+	 * Retorna la caja asignada al cliente.
 	 * 
-	 * @return Identificador de la caja.
+	 * @return cadena con el identificador de la caja.
 	 */
 	public String getCajaAsignada() {
 		return cajaAsignada;
 	}
 
 	/**
-	 * Setter de la caja asignada.
+	 * Establece la caja asignada al cliente.
 	 * 
-	 * @param cajaAsignada Identificador de la caja.
+	 * @param cajaAsignada cadena con el identificador de la caja.
 	 */
 	public void setCajaAsignada(String cajaAsignada) {
 		this.cajaAsignada = cajaAsignada;
 	}
 
 	/**
-	 * Getter del tiempo de pago.
+	 * Retorna el tiempo de pago asignado al cliente.
 	 * 
 	 * @return Tiempo de pago.
 	 */
@@ -47,7 +53,7 @@ public class Cliente implements Runnable {
 	}
 
 	/**
-	 * Setter del tiempo de pago.
+	 * Establece el tiempo de pago del cliente.
 	 * 
 	 * @param tiempoPago Tiempo de pago.
 	 */
@@ -56,7 +62,11 @@ public class Cliente implements Runnable {
 	}
 
 	/**
-	 * Constructor de la clase.
+	 * Constructor de la clase Cliente. Inicializa un nuevo cliente con un
+	 * identificador único y diversos buzones. Estos últimos los utilizará para
+	 * enviar y recibir mensajes con el coordinador de cajas. Serán relacionados con
+	 * la asignación de cajas, la liberación de cajas, y la impresión de mensajes
+	 * informativos.
 	 * 
 	 * @param id             Identificador del cliente.
 	 * @param buzonEnvio     Buzón de envío.
@@ -78,8 +88,14 @@ public class Cliente implements Runnable {
 	}
 
 	/**
-	 * Método run del hilo. Realiza las operaciones de un cliente.
+	 * Realiza las acciones del cliente durante su visita al supermercado. En cada
+	 * una de las cinco iteraciones, el cliente: realiza una compra, solicita y
+	 * espera la asignación de una caja, paga en la caja asignada, y finalmente
+	 * libera la caja. Las acciones de solicitud, pago y liberación son coordinadas
+	 * a través del intercambio de mensajes con el controlador utilizando buzones
+	 * específicos. Además, se imprimime por pantalla la evolución del cliente.
 	 */
+
 	@Override
 	public void run() {
 		for (int i = 0; i < 5; i++) {

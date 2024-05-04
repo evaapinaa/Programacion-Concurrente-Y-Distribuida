@@ -5,37 +5,48 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Clase del programa principal.  
+ * Esta clase representa el programa principal, para demostrar la concurrencia
+ * en Java usando ReentrantLock. Gestiona la creación y ejecución de múltiples
+ * hilos consumidores y un hilo sumador que trabajan sobre un array compartido
+ * de operaciones matemáticas y valores. El array es creado primero y
+ * posteriormente procesado por los hilos consumidores, cada uno en una sección
+ * del array.
+ * 
  */
+
 public class Ejercicio1 {
 
 	/**
 	 * Número de consumidores.
-     */
+	 */
 	public static final int N_CONSUMIDORES = 10;
-	 /**
-     * Longitud del array.
-     */
+	/**
+	 * Longitud del array.
+	 */
 	public static final int LONGITUD_ARRAY = 110;
-	
-	
+
 	/**
 	 * Random para generar números aleatorios.
 	 */
 	public static Random random = new Random();
-	
+
 	/**
 	 * Array de elementos a procesar.
 	 */
 	public static int[] array = new int[LONGITUD_ARRAY];
-	
+
 	/**
 	 * Cerrojo para asegurar exclusión mutua.
 	 */
 	public static ReentrantLock lock = new ReentrantLock();
 
 	/**
-	 * Programa principal.
+	 * 
+	 * Punto de entrada del programa. Inicializa el array con números y operaciones
+	 * de numeros enteros, crea e inicia los hilos consumidores y el hilo sumador, y
+	 * espera a que todos terminen para concluir la ejecución.
+	 * 
+	 * 
 	 * @param args Argumentos del programa.
 	 */
 	public static void main(String[] args) {

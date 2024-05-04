@@ -3,14 +3,22 @@ package Ejercicio4;
 import messagepassing.*;
 
 /**
- * Clase del programa principal.
- *
+ * Programa principal que simula el proceso de compra y pago en un supermercado
+ * con dos cajas (A y B). Inicializa un controlador, que funcionará como un
+ * servidor para coordinar, y múltiples clientes. Utiliza buzones de mensajes
+ * para la comunicación entre el controlador y los clientes, permitiendo una
+ * ejecución sincronizada de los hilos.
  */
+
 public class Programa {
 
 	/**
-	 * Clase que simula el hilo controlador.
-	 *
+	 * Gestiona la asignación de cajas a los clientes en un supermercado con dos
+	 * cajas de pago. Usa paso de mensajes para recibir solicitudes de los clientes
+	 * y asignarles cajas basándose en el tiempo estimado de pago (caja A para pagos
+	 * más largos). También maneja la liberación de cajas y la impresión de
+	 * mensajes. La sincronización del acceso a las cajas se controla a través de un
+	 * selector.
 	 */
 	static class Controlador extends Thread {
 		private MailBox pEnviar, pCajaA, pCajaB, pLiberar, pImprimir;
@@ -19,7 +27,10 @@ public class Programa {
 		private Selector s;
 
 		/**
-		 * Constructor de la clase.
+		 * Constructor de la clase Controlador. Inicializa el controlador con buzones de
+		 * mensajes específicos para manejar la asignación de cajas, liberación de cajas
+		 * y acciones de impresión. Establece el estado inicial de las cajas como libres
+		 * y configura un selector para gestionar los mensajes que provienen de los hilos.
 		 * 
 		 * @param pEnviar   Buzón de mensajes para enviar.
 		 * @param pCajaA    Buzón de mensajes para la caja A.
@@ -46,12 +57,21 @@ public class Programa {
 		}
 
 		/**
-		 * Método run del hilo controlador.
+		 * Procesa las solicitudes de los clientes y gestiona la
+		 * asignación y liberación de cajas. Utiliza un selector para esperar y
+		 * responder a los mensajes de diferentes buzones: 
+		 * 1) Asignación de caja basada en el tiempo de pago
+		 * 2) Manejo de clientes en la caja A
+		 * 3) Manejo de clientes en la caja B
+		 * 4) Liberación de la caja.
+		 * 5) Impresión de mensajes. 
+		 * 
 		 */
+
 		public void run() {
 			while (true) {
-				pCajaA.setGuardValue(cajaALibre == true);
-				pCajaB.setGuardValue(cajaBLibre == true);
+				pCajaA.setGuardValue(cajaALibre == true); // se puede usar la caja A si está libre
+				pCajaB.setGuardValue(cajaBLibre == true); // se puede usar la caja B si está libre
 				switch (s.selectOrBlock()) {
 				case 1: // peticion caja
 					Object id = pEnviar.receive();
@@ -103,24 +123,28 @@ public class Programa {
 	}
 
 	// CONSTANTES, VARIABLES
-	
+
 	/**
 	 * Número de clientes.
-     */
+	 */
 	public static final int NUM_CLIENTES = 30;
-	
+
 	/**
 	 * Array de hilos clientes.
 	 */
 	public static Thread Clientes[] = new Thread[NUM_CLIENTES];
-	
+
 	/**
 	 * Array de buzones de respuesta de cada cliente.
 	 */
 	public static MailBox buzonesClientes[] = new MailBox[30];
 
 	/**
-	 * Programa principal.
+	 * Punto de inicio del programa principal.
+	 * Crea y arranca un hilo para el controlador y un conjunto de
+	 * hilos para los clientes. Configura buzones de mensajes para la 
+	 * comunicación entre clientes y el controlador. Espera a que todos 
+	 * los clientes completen sus acciones.
 	 * 
 	 * @param args Argumentos del programa.
 	 */

@@ -1,9 +1,12 @@
 package Ejercicio1;
 
 /**
- * Hilo que se encarga de realizar las operaciones de un bloque de 11 elementos
- * de un array.
+ * Hilo dedicado a sumar todos los resultados generados por los hilos
+ * consumidores. Accede al array de resultados, suma todos sus elementos y
+ * muestra el resultado total. Este se inicia después de que todos los hilos
+ * consumidores hayan terminado.
  */
+
 public class ProcesoSumador extends Thread {
 
 	private final int[] resultados;
@@ -18,7 +21,7 @@ public class ProcesoSumador extends Thread {
 	}
 
 	/**
-	 * Método run del hilo. Realiza la suma de los resultados de las operaciones.
+	 * Realiza la suma de los resultados de las operaciones.
 	 */
 	@Override
 	public void run() {
